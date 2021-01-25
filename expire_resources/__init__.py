@@ -37,5 +37,9 @@ async def main(mytimer: func.TimerRequest) -> None:
                                                                 type="get_resource"))
                 except Exception as e:
                     logging.error("encountered: {0}".format(str(e)))  
+
+    # get Expired and Valid resources
+    expired_resources, valid_resources = check_managed_resource_status(managed_resources)
     
-    logging.info(managed_resources)
+    print("expired reosurce: {}".format(expired_resources))
+    print("valid reosurce: {}".format(valid_resources))
