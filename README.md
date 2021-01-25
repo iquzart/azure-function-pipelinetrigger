@@ -27,6 +27,9 @@ The function will list all the resources with tag "ExpiryDate" from given Azure 
     "parameters": "{\"action\":  \"destroy\"}" -------------> (The pipline destroy stage should have a condition to run only when the action variable value is destroy)
     }
 ```
+## Azure DevOps Pipeline sample
+
+You may find a sample pipline [here](https://github.com/iquzart/azure-iac/tree/master/go-app)
 
 ## License
 MIT
