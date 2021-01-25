@@ -8,6 +8,7 @@ from azure.common.credentials import (ServicePrincipalCredentials, get_azure_cli
 from azure.mgmt.resource import ResourceManagementClient
 
 from .resource_ops import * 
+from .util import tabulate_report
 
 async def main(mytimer: func.TimerRequest) -> None:
     """
@@ -41,5 +42,15 @@ async def main(mytimer: func.TimerRequest) -> None:
     # get Expired and Valid resources
     expired_resources, valid_resources = check_managed_resource_status(managed_resources)
     
-    print("expired reosurce: {}".format(expired_resources))
-    print("valid reosurce: {}".format(valid_resources))
+    if len(valid_resources) != 0:
+        logging.info("Valid Resources:")
+        logging.info(tabulate_report(valid_resources))         
+    else:
+        logging.info("No Valid Resources found")
+
+    if len(expired_resources) != 0:
+        print("Expired Resources:")
+        print(tabulate_report(expired_resources))
+    else:
+        print("No Expired Resources found")
+  
