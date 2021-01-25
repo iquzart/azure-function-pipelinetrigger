@@ -27,7 +27,7 @@ async def main(mytimer: func.TimerRequest) -> None:
     # Obtain the management object for resources.
     resource_client = ResourceManagementClient(credential, subscription_id)
 
-    managed_resource_groups = os.environ["RG_GROUPS"].split(",")
+    managed_resource_groups = os.environ["RESOURCE_GROUPS"].split(",")
    
     managed_resources = []
     for managed_resource_group in managed_resource_groups:
