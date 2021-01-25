@@ -3,3 +3,10 @@
 # Manually managing azure-functions-worker may cause unexpected issues
 
 azure-functions
+azure-mgmt-resource
+azure-identity
+azure-cli-core
+azure-common
+#azure-core
+pytz
+tabulate
