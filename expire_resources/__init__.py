@@ -7,7 +7,7 @@ from azure.identity import DefaultAzureCredential
 from azure.common.credentials import (ServicePrincipalCredentials, get_azure_cli_credentials)
 from azure.mgmt.resource import ResourceManagementClient
 
-from .resource_ops import * 
+from .resource_ops import (resource_extractor, check_managed_resource_status)
 from .util import tabulate_report
 
 async def main(mytimer: func.TimerRequest) -> None:
@@ -49,8 +49,15 @@ async def main(mytimer: func.TimerRequest) -> None:
         logging.info("No Valid Resources found")
 
     if len(expired_resources) != 0:
-        print("Expired Resources:")
-        print(tabulate_report(expired_resources))
+        logging.info("Expired Resources:")
+        loggging.info(tabulate_report(expired_resources))
+        
+        # trigger pipeline to destroy the expired resources
+        response, pipeline_id = trigger_pipelines(expired_resources)
+        if response.status_code == 200:
+            logging.info("Successfully Triggerd pipeline")
+        else:
+            logging.error("Failed while initiating destroy on pipeline - {}".format(pipeline_id))        
     else:
-        print("No Expired Resources found")
+        logging.info("No Expired Resources found")
   
