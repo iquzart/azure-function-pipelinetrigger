@@ -24,7 +24,11 @@ def resource_extractor(resource, type):
         
         
 def check_managed_resource_status(managed_resources):
+    """
+    Return expired and valid resource lists
+    """    
     
+    # Time Zone to match with resource expiry date
     tz = pytz.timezone('Asia/Dubai') 
     now = datetime.now(tz).strftime("%d/%m/%Y %H:%M:%S")
     
