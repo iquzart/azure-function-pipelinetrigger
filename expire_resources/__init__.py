@@ -9,6 +9,7 @@ from azure.mgmt.resource import ResourceManagementClient
 
 from .resource_ops import (resource_extractor, check_managed_resource_status)
 from .util import tabulate_report
+from .trigger_pipeline import trigger_pipelines
 
 async def main(mytimer: func.TimerRequest) -> None:
     """
@@ -50,7 +51,7 @@ async def main(mytimer: func.TimerRequest) -> None:
 
     if len(expired_resources) != 0:
         logging.info("Expired Resources:")
-        loggging.info(tabulate_report(expired_resources))
+        logging.info(tabulate_report(expired_resources))
         
         # trigger pipeline to destroy the expired resources
         response, pipeline_id = trigger_pipelines(expired_resources)
