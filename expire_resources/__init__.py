@@ -7,7 +7,8 @@ from azure.identity import DefaultAzureCredential
 from azure.common.credentials import (ServicePrincipalCredentials, get_azure_cli_credentials)
 from azure.mgmt.resource import ResourceManagementClient
 
-from .resource_ops import (resource_extractor, check_managed_resource_status)
+
+from .resource_ops import (resource_extractor, check_managed_resource_status, check_rg_availability)
 from .util import tabulate_report
 from .trigger_pipeline import trigger_pipelines
 
@@ -27,11 +28,15 @@ async def main(mytimer: func.TimerRequest) -> None:
     # Obtain the management object for resources.
     resource_client = ResourceManagementClient(credential, subscription_id)
 
+    # managed resource groups provided on env
     managed_resource_groups = os.environ["RESOURCE_GROUPS"].split(",")
-   
+    
+    managed_resource_groups = check_rg_availability(resource_client, managed_resource_groups)
+
     managed_resources = []
     for managed_resource_group in managed_resource_groups:
         resources = resource_client.resources.list_by_resource_group(managed_resource_group)
+
         for resource in resources:
             if (resource.tags != None) and ('ExpiryDate' in resource.tags):   
                 try:

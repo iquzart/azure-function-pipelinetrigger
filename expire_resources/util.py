@@ -7,5 +7,5 @@ def tabulate_report(data):
     """    
     header = data[0].keys()
     rows =  [x.values() for x in data]
-    return (tabulate.tabulate(rows, header,  tablefmt='grid'))
+    return (tabulate.tabulate(rows, header))
     
