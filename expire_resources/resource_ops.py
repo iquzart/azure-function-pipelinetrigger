@@ -1,7 +1,20 @@
 import pytz
 import logging
 from datetime import datetime
+from azure.mgmt.resource import ResourceManagementClient
 
+def check_rg_availability(resource_client, managed_resource_groups):
+    """
+    Check the resource group provided is available in Azure environment
+    """
+    # Get list of all resource groups
+    all_resource_groups = []
+    for resource_group in resource_client.resource_groups.list():
+        all_resource_groups.append(resource_group.name)
+   
+    # update managed resource group with existing 
+    m_rgs =  list(set(all_resource_groups).intersection(set(managed_resource_groups)))
+    return m_rgs
 
 def resource_extractor(resource, type):
     """
