@@ -28,6 +28,7 @@ async def main(mytimer: func.TimerRequest) -> None:
     # Obtain the management object for resources.
     resource_client = ResourceManagementClient(credential, subscription_id)
 
+    
     # managed resource groups provided on env
     managed_resource_groups = os.environ["RESOURCE_GROUPS"].split(",")
     
@@ -58,12 +59,14 @@ async def main(mytimer: func.TimerRequest) -> None:
         logging.info("Expired Resources:")
         logging.info(tabulate_report(expired_resources))
         
+        pipeline_ids = set( val for dic in expired_resources for val in dic.get("PipelineID"))
         # trigger pipeline to destroy the expired resources
-        response, pipeline_id = trigger_pipelines(expired_resources)
-        if response.status_code == 200:
-            logging.info("Successfully Triggerd pipeline")
-        else:
-            logging.error("Failed while initiating destroy on pipeline - {}".format(pipeline_id))        
+        for pipeline_id in pipeline_ids:
+            logging.info("Initiating destroy stage on pipeline id: {}".format(pipeline_id))
+            response = trigger_pipelines(pipeline_id)
+            if response.status_code == 200:
+                logging.info("Successfully Triggerd pipeline")
+            else:
+                logging.error("Failed while initiating destroy on pipeline - {}".format(pipeline_id))
     else:
         logging.info("No Expired Resources found")
-  
